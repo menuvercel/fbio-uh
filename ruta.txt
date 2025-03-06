@@ -1,0 +1,46 @@
+facultad-biologia-uh/
+├── public/
+│   ├── images/
+│   │   ├── logo-uh.png
+│   │   ├── facultad.jpg
+│   │   └── ...
+├── src/
+│   ├── components/
+│   │   ├── Layout/
+│   │   │   ├── Header.jsx
+│   │   │   ├── Footer.jsx
+│   │   │   └── Navbar.jsx
+│   │   ├── Home/
+│   │   │   ├── Hero.jsx
+│   │   │   ├── Stats.jsx
+│   │   │   └── About.jsx
+│   │   ├── News/
+│   │   │   ├── NewsCard.jsx
+│   │   │   └── NewsList.jsx
+│   │   ├── Publications/
+│   │   │   ├── PublicationCard.jsx
+│   │   │   └── PublicationsList.jsx
+│   │   └── Careers/
+│   │       ├── CareerCard.jsx
+│   │       └── CareersList.jsx
+│   ├── pages/
+│   │   ├── index.js
+│   │   ├── about.js
+│   │   ├── news/
+│   │   │   ├── index.js
+│   │   │   └── [id].js
+│   │   ├── publications/
+│   │   │   ├── index.js
+│   │   │   └── [id].js
+│   │   └── careers/
+│   │       ├── index.js
+│   │       └── [id].js
+│   ├── styles/
+│   │   ├── globals.css
+│   │   └── Home.module.css
+│   └── data/
+│       ├── stats.js
+│       ├── news.js
+│       ├── publications.js
+│       └── careers.js
+└── package.json
