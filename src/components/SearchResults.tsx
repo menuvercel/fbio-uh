@@ -42,7 +42,9 @@ export default function SearchResults({ results, isOpen, onClose, searchQuery }:
           <div className="p-4">
             {results.length === 0 ? (
               <div className="text-center py-8">
-                <p className="text-gray-600">No se encontraron resultados para tu búsqueda.</p>
+                <p className="text-gray-600 text-center mt-4">
+                  No se encontraron resultados para &quot;{searchQuery}&quot;
+                </p>
                 <p className="text-sm text-gray-500 mt-2">
                   Intenta con otros términos o navega por nuestro menú principal.
                 </p>

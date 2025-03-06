@@ -1,6 +1,6 @@
 'use client';
 
-import { FiUsers, FiCalendar, FiGlobe, FiAward, FiBookOpen, FiHeart, FiArrowRight } from 'react-icons/fi';
+import { FiUsers, FiCalendar, FiGlobe, FiArrowRight } from 'react-icons/fi';
 import Image from 'next/image';
 import PageTransition from '@/components/PageTransition';
 import Link from 'next/link';

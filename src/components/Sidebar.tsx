@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
+import Image from 'next/image';
 import { 
   FiHome, 
   FiBook, 
@@ -72,7 +73,13 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                 clickedItem === '/' ? 'scale-105' : ''
               }`}
             >
-              <img src="/logo.png" alt="Logo" className="w-12 h-12" />
+              <Image 
+                src="/logo.png" 
+                alt="Logo" 
+                width={48}
+                height={48}
+                className="w-12 h-12"
+              />
               <span className="font-display font-bold text-xl text-gray-900">Facultad de Biología</span>
             </button>
           </div>
