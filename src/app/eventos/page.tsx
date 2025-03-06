@@ -1,6 +1,6 @@
 'use client';
 
-import { FiCalendar, FiMapPin, FiArrowRight } from 'react-icons/fi';
+import { FiCalendar, FiMapPin } from 'react-icons/fi';
 import Link from 'next/link';
 import Image from 'next/image';
 import PageTransition from '@/components/PageTransition';

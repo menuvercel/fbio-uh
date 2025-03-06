@@ -28,7 +28,7 @@ export default function SearchResults({ results, isOpen, onClose, searchQuery }:
           {/* Header */}
           <div className="flex items-center justify-between p-4 border-b">
             <h3 className="text-lg font-semibold text-gray-900">
-              Resultados para "{searchQuery}"
+              Resultados para &quot;{searchQuery}&quot;
             </h3>
             <button
               onClick={onClose}
