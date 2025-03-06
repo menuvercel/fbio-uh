@@ -1,5 +1,8 @@
+'use client';
+
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
+import { Metadata } from 'next';
 
 // Datos de ejemplo - En producción esto vendría de una API o CMS
 const carrerasData = {
@@ -233,13 +236,11 @@ const carrerasData = {
   }
 };
 
-type Props = {
-  params: {
-    id: string;
-  };
-};
-
-export default async function CarreraPage({ params }: Props) {
+export default function CarreraPage({
+  params,
+}: {
+  params: { id: string };
+}) {
   const carrera = carrerasData[params.id as keyof typeof carrerasData];
 
   if (!carrera) {
