@@ -233,7 +233,13 @@ const carrerasData = {
   }
 };
 
-export default function CarreraPage({ params }: { params: { id: string } }) {
+type Props = {
+  params: {
+    id: string;
+  };
+};
+
+export default async function CarreraPage({ params }: Props) {
   const carrera = carrerasData[params.id as keyof typeof carrerasData];
 
   if (!carrera) {
