@@ -7,8 +7,7 @@ const CarrerasPage = () => {
       id: 'bioquimica',
       titulo: 'Bioquímica y Biología Molecular',
       descripcion: 'Esta carrera te prepara para comprender los procesos químicos que ocurren en los organismos vivos a nivel molecular. Aprenderás sobre enzimología, metabolismo, biología molecular y biotecnología.',
-      duracion: '5 años',
-      creditos: '300',
+      duracion: '4 años',
       imagen: '/bioquimica.jpg',
       salidas: [
         'Investigación biomédica',
@@ -21,8 +20,7 @@ const CarrerasPage = () => {
       id: 'microbiologia',
       titulo: 'Microbiología y Virología',
       descripcion: 'Especialízate en el estudio de microorganismos y virus. Esta carrera te preparará para trabajar en microbiología médica, industrial y ambiental, así como en virología.',
-      duracion: '5 años',
-      creditos: '300',
+      duracion: '4 años',
       imagen: '/microbiologia.jpg',
       salidas: [
         'Laboratorios de diagnóstico',
@@ -35,8 +33,7 @@ const CarrerasPage = () => {
       id: 'biologia',
       titulo: 'Biología',
       descripcion: 'Estudia la vida en todas sus formas, desde el nivel molecular hasta el ecosistémico. Esta carrera ofrece una formación integral en biología con énfasis en la biodiversidad cubana.',
-      duracion: '5 años',
-      creditos: '300',
+      duracion: '4 años',
       imagen: '/biologia.jpg',
       salidas: [
         'Conservación de la naturaleza',
@@ -72,10 +69,6 @@ const CarrerasPage = () => {
                     <div>
                       <h3 className="font-semibold text-gray-900">Duración</h3>
                       <p className="text-gray-600">{carrera.duracion}</p>
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-gray-900">Créditos</h3>
-                      <p className="text-gray-600">{carrera.creditos}</p>
                     </div>
                   </div>
 

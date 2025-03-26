@@ -40,6 +40,13 @@ export default function RootLayout({
     };
   }, [isSidebarOpen]);
 
+  // Función para cerrar el sidebar al tocar fuera
+  const handleMainContentClick = () => {
+    if (isSidebarOpen) {
+      setIsSidebarOpen(false);
+    }
+  };
+
   return (
     <html lang="es" className={`${inter.variable} ${poppins.variable}`}>
       <body className={`bg-gray-50 ${isLoaded ? 'animate-fade-in' : 'opacity-0'} overflow-x-hidden`}>
@@ -54,8 +61,9 @@ export default function RootLayout({
         />
         <div 
           className={`relative min-h-screen flex flex-col transform transition-transform duration-300 ease-in-out ${
-            isSidebarOpen ? 'translate-x-96' : 'translate-x-0'
+            isSidebarOpen ? 'translate-x-[300px]' : 'translate-x-0'
           }`}
+          onClick={handleMainContentClick}
         >
           <TopBanner 
             onMenuClick={() => setIsSidebarOpen(true)}

@@ -13,7 +13,7 @@
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
-    --foreground: #ededed;
+    --foreground: #ffffff;
   }
 }
 
@@ -21,4 +21,134 @@ body {
   color: var(--foreground);
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
+  overscroll-behavior-y: none; /* Evita el rebote al hacer scroll */
+  touch-action: manipulation; /* Mejora la experiencia táctil */
+}
+
+/* Asegurar que los textos siempre tengan buen contraste en modo oscuro */
+@media (prefers-color-scheme: dark) {
+  .text-gray-600, 
+  .text-gray-700, 
+  .text-gray-800, 
+  .text-gray-900 {
+    color: #ffffff !important;
+  }
+  
+  /* Mantener fondos oscuros */
+  .bg-white {
+    background-color: #1a1a1a !important;
+  }
+}
+
+/* Mejorar la experiencia de scroll horizontal */
+.snap-x {
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; /* Firefox */
+  scroll-behavior: smooth;
+}
+
+.snap-x::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge */
+}
+
+/* Añadir indicador visual de scroll horizontal en móvil */
+@media (max-width: 768px) {
+  .overflow-x-auto {
+    position: relative;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    touch-action: pan-x !important;
+    overflow-x: scroll !important;
+  }
+  
+  .overflow-x-auto::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* Eliminar el degradado blanco */
+  .overflow-x-auto::after {
+    content: none;
+  }
+
+  /* Contenedor de tarjetas con scroll automático */
+  .cards-container {
+    display: flex !important;
+    overflow-x: scroll !important;
+    scroll-snap-type: x proximity;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 10px;
+    -ms-touch-action: pan-x !important; 
+    touch-action: pan-x !important; 
+    pointer-events: auto !important;
+    user-select: none;
+    z-index: 10;
+    position: relative;
+  }
+  
+  /* Estilo para las tarjetas */
+  .card-slide {
+    scroll-snap-align: start;
+    flex-shrink: 0;
+    transition: none;
+    will-change: transform;
+    backface-visibility: hidden;
+    transform: translateZ(0);
+    pointer-events: auto !important;
+  }
+  
+  /* Clase para pausar la animación */
+  .cards-container.paused .card-slide {
+    animation-play-state: paused !important;
+    transition: none !important;
+    transform: none !important;
+  }
+}
+
+/* Evitar rebote en el scroll en la parte superior y altura fija */
+.sticky {
+  position: sticky;
+  position: -webkit-sticky;
+  top: 0;
+  overflow: hidden;
+  z-index: 100;
+  max-height: 80px;
+}
+
+/* Animaciones de página para aplicar en transiciones */
+.page-transition-enter {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.page-transition-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 300ms, transform 300ms;
+}
+
+.page-transition-exit {
+  opacity: 1;
+}
+
+.page-transition-exit-active {
+  opacity: 0;
+  transition: opacity 200ms;
+}
+
+/* Limitar número de líneas de texto */
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Animación de desvanecimiento para enlaces */
+.fade-link {
+  transition: opacity 0.3s ease-in-out;
+}
+
+.fade-link:active {
+  opacity: 0.7;
 }
