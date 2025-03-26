@@ -4,7 +4,7 @@ import { FiArrowRight } from 'react-icons/fi';
 import Image from 'next/image';
 import Link from 'next/link';
 import Card from '@/components/Card';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { Cormorant } from 'next/font/google';
 
 const cormorant = Cormorant({ 
@@ -14,19 +14,19 @@ const cormorant = Cormorant({
 
 const carreras = [
   {
-    titulo: 'Licenciatura en Biología',
+    titulo: 'Biología',
     descripcion: 'Forma profesionales con una sólida base en ciencias biológicas, capaces de investigar y comprender los sistemas vivos en todos sus niveles de organización.',
     imagen: '/carreras/biologia.jpg',
     enlace: '/carreras/biologia'
   },
   {
-    titulo: 'Licenciatura en Microbiología',
+    titulo: 'Microbiología y Virología',
     descripcion: 'Especialización en el estudio de microorganismos, su impacto en la salud, el medio ambiente y la biotecnología.',
     imagen: '/carreras/microbiologia.jpg',
     enlace: '/carreras/microbiologia'
   },
   {
-    titulo: 'Licenciatura en Bioquímica',
+    titulo: 'Bioquímica y Biología Molecular',
     descripcion: 'Enfoque en el estudio de los procesos químicos en los sistemas biológicos y sus aplicaciones en la investigación biomédica.',
     imagen: '/carreras/bioquimica.jpg',
     enlace: '/carreras/bioquimica'
@@ -38,83 +38,73 @@ const noticias = [
     titulo: 'Descubrimiento de Nueva Especie Endémica',
     fecha: '15 Mar 2024',
     imagen: '/noticias/descubrimiento.jpg',
-    categoria: 'Investigación'
+    categoria: 'Investigación',
+    descripcion: 'Investigadores de nuestra facultad han descubierto una nueva especie de hongo endémico con potenciales aplicaciones en la industria farmacéutica.'
   },
   {
     titulo: 'Apertura de Nuevo Laboratorio de Biotecnología',
     fecha: '10 Mar 2024',
     imagen: '/noticias/laboratorio.jpg',
-    categoria: 'Infraestructura'
+    categoria: 'Infraestructura',
+    descripcion: 'La facultad inaugura un moderno laboratorio equipado con tecnología de última generación para investigaciones en biotecnología y microbiología.'
   },
   {
     titulo: 'Premio Internacional a Investigación sobre Corales',
     fecha: '5 Mar 2024',
     imagen: '/noticias/premio.jpg',
-    categoria: 'Reconocimientos'
+    categoria: 'Reconocimientos',
+    descripcion: 'Nuestro equipo de investigación marina recibe reconocimiento internacional por su trabajo sobre la conservación de ecosistemas coralinos.'
   }
 ];
 
 export default function HomePage() {
   const [isLoaded, setIsLoaded] = useState(false);
-  const carrerasContainerRef = useRef<HTMLDivElement>(null);
-  const noticiasContainerRef = useRef<HTMLDivElement>(null);
-  const pauseTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const [navigating, setNavigating] = useState(false);
+  const [navigateTo, setNavigateTo] = useState('');
 
   useEffect(() => {
     setIsLoaded(true);
     
-    // Función para pausar la animación cuando el usuario hace scroll
-    const handleScroll = (event: WheelEvent | TouchEvent) => {
-      const target = event.currentTarget as HTMLElement;
+    // Si estamos navegando, redirigir después de la animación
+    if (navigating && navigateTo) {
+      const timer = setTimeout(() => {
+        // Añadir parámetro para indicar que debe hacer fade al entrar
+        const url = new URL(navigateTo, window.location.origin);
+        url.searchParams.set('fade', 'true');
+        window.location.href = url.toString();
+      }, 400); // Reducido a 400ms para que sea más rápido
       
-      // Añadir clase para pausar
-      target.classList.add('paused');
-      
-      // Limpiar timeout anterior si existe
-      if (pauseTimerRef.current) {
-        clearTimeout(pauseTimerRef.current);
-      }
-      
-      // Establecer nuevo timeout
-      pauseTimerRef.current = setTimeout(() => {
-        target.classList.remove('paused');
-      }, 3000);
-    };
-    
-    // Añadir event listeners para el scroll
-    const carrerasContainer = carrerasContainerRef.current;
-    const noticiasContainer = noticiasContainerRef.current;
-    
-    if (carrerasContainer) {
-      carrerasContainer.addEventListener('wheel', handleScroll);
-      carrerasContainer.addEventListener('touchmove', handleScroll);
+      return () => clearTimeout(timer);
     }
+  }, [navigating, navigateTo]);
+
+  // Función para manejar la navegación con animación
+  const handleNavigation = (e: React.MouseEvent<HTMLAnchorElement>, url: string) => {
+    e.preventDefault();
+    setNavigateTo(url);
+    setNavigating(true);
+  };
+
+  // Efecto para aplicar fade-in cuando la página carga
+  useEffect(() => {
+    // Verificar si venimos de otra página con parámetro fade
+    const urlParams = new URLSearchParams(window.location.search);
+    const shouldFade = urlParams.get('fade') === 'true';
     
-    if (noticiasContainer) {
-      noticiasContainer.addEventListener('wheel', handleScroll);
-      noticiasContainer.addEventListener('touchmove', handleScroll);
+    if (shouldFade) {
+      // Limpiar el parámetro de la URL sin recargar la página
+      window.history.replaceState({}, document.title, window.location.pathname);
+      
+      // Aplicar fade-in
+      document.body.classList.add('page-enter');
+      setTimeout(() => {
+        document.body.classList.remove('page-enter');
+      }, 500);
     }
-    
-    // Cleanup
-    return () => {
-      if (carrerasContainer) {
-        carrerasContainer.removeEventListener('wheel', handleScroll);
-        carrerasContainer.removeEventListener('touchmove', handleScroll);
-      }
-      
-      if (noticiasContainer) {
-        noticiasContainer.removeEventListener('wheel', handleScroll);
-        noticiasContainer.removeEventListener('touchmove', handleScroll);
-      }
-      
-      if (pauseTimerRef.current) {
-        clearTimeout(pauseTimerRef.current);
-      }
-    };
   }, []);
 
   return (
-    <div className={`min-h-screen transition-opacity duration-1000 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
+    <div className={`min-h-screen transition-opacity duration-500 ${isLoaded ? 'opacity-100' : 'opacity-0'} ${navigating ? 'page-exit' : ''}`}>
       {/* Hero Section */}
       <section className="relative h-[90vh] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 z-0">
@@ -140,16 +130,7 @@ export default function HomePage() {
           <Link
             href="/sobre-nosotros"
             className="sobre-nosotros-link inline-flex items-center px-8 py-4 text-lg font-medium text-white bg-primary-600/90 rounded-xl hover:bg-primary-700 transition-all shadow-soft-xl hover:shadow-soft-2xl transform hover:-translate-y-1 border-2 border-white/20 hover:border-white/40 animate-fade-in"
-            onClick={(e) => {
-              e.preventDefault();
-              const link = e.currentTarget;
-              link.style.opacity = '0';
-              link.style.transition = 'opacity 0.5s ease-out';
-              
-              setTimeout(() => {
-                window.location.href = '/sobre-nosotros';
-              }, 500);
-            }}
+            onClick={(e) => handleNavigation(e, '/sobre-nosotros')}
           >
             Sobre Nosotros
             <FiArrowRight className="ml-2" />
@@ -169,27 +150,25 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div 
-            ref={carrerasContainerRef}
-            className="flex overflow-x-auto pb-4 snap-x snap-mandatory -mx-4 px-4 md:grid md:grid-cols-3 md:gap-8 cards-container"
-          >
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
             {carreras.map((carrera, index) => (
               <Link 
                 key={index} 
                 href={carrera.enlace}
-                className="snap-start shrink-0 w-[85%] pr-4 md:pr-0 md:w-full card-slide"
+                className={`block w-full transition-all duration-300 hover:scale-[1.02] card-animate ${navigating ? 'card-exit' : ''}`}
+                onClick={(e) => handleNavigation(e, carrera.enlace)}
               >
                 <Card 
                   hover 
                   gradient 
-                  className="h-full group transform hover:scale-105 transition-all duration-300 shadow-[0_15px_30px_rgba(0,0,0,0.25)] hover:shadow-[0_20px_40px_rgba(8,_112,_184,_0.35)] flex flex-col"
+                  className="h-[400px] flex flex-col shadow-[0_15px_30px_rgba(0,0,0,0.25)] hover:shadow-[0_20px_40px_rgba(8,_112,_184,_0.35)]"
                 >
                   <div className="relative h-60 rounded-t-2xl overflow-hidden">
                     <Image
                       src={carrera.imagen}
                       alt={carrera.titulo}
                       fill
-                      className="object-cover transition-transform duration-300 group-hover:scale-110"
+                      className="object-cover"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
                   </div>
@@ -202,7 +181,7 @@ export default function HomePage() {
                     </p>
                     <div className={`${cormorant.className} flex items-center text-primary-600 font-medium text-lg mt-auto`}>
                       Conocer más
-                      <FiArrowRight className="ml-2 w-5 h-5 transition-transform group-hover:translate-x-2" />
+                      <FiArrowRight className="ml-2 w-5 h-5" />
                     </div>
                   </div>
                 </Card>
@@ -224,22 +203,19 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div 
-            ref={noticiasContainerRef}
-            className="flex overflow-x-auto pb-4 snap-x snap-mandatory -mx-4 px-4 md:grid md:grid-cols-3 md:gap-8 cards-container"
-          >
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
             {noticias.map((noticia, index) => (
               <div 
                 key={index} 
-                className="snap-start shrink-0 w-[85%] pr-4 md:pr-0 md:w-full card-slide"
+                className="w-full"
               >
-                <Card hover className="group h-full flex flex-col shadow-[0_15px_30px_rgba(0,0,0,0.25)] hover:shadow-[0_20px_40px_rgba(8,_112,_184,_0.35)]">
+                <Card hover className="h-[450px] flex flex-col shadow-[0_15px_30px_rgba(0,0,0,0.25)] hover:shadow-[0_20px_40px_rgba(8,_112,_184,_0.35)]">
                   <div className="relative h-60 rounded-t-2xl overflow-hidden">
                     <Image
                       src={noticia.imagen}
                       alt={noticia.titulo}
                       fill
-                      className="object-cover transition-transform duration-300 group-hover:scale-110"
+                      className="object-cover"
                     />
                     <div className={`${cormorant.className} absolute top-4 left-4 px-3 py-1 bg-white/90 backdrop-blur-sm rounded-full text-sm font-medium text-gray-900`}>
                       {noticia.categoria}
@@ -250,15 +226,16 @@ export default function HomePage() {
                     <h3 className={`${cormorant.className} text-2xl font-semibold text-gray-900 mb-2`}>
                       {noticia.titulo}
                     </h3>
-                    <p className={`${cormorant.className} text-base text-gray-600 mb-4 flex-grow font-medium line-clamp-3`}>
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                    <p className={`${cormorant.className} text-base text-gray-600 mb-4 flex-grow font-medium`}>
+                      {noticia.descripcion}
                     </p>
                     <Link
                       href={`/noticias/${noticia.titulo.toLowerCase().replace(/ /g, '-')}`}
                       className={`${cormorant.className} inline-flex items-center text-primary-600 font-medium mt-auto`}
+                      onClick={(e) => handleNavigation(e, `/noticias/${noticia.titulo.toLowerCase().replace(/ /g, '-')}`)}
                     >
                       Leer más
-                      <FiArrowRight className="ml-2 transition-transform group-hover:translate-x-2" />
+                      <FiArrowRight className="ml-2" />
                     </Link>
                   </div>
                 </Card>
@@ -290,6 +267,7 @@ export default function HomePage() {
               <Link
                 href="/contacto"
                 className={`${cormorant.className} inline-flex items-center px-8 py-4 text-lg font-medium text-primary-700 bg-white hover:bg-gray-50 rounded-xl transition-colors shadow-soft-xl hover:shadow-soft-2xl transform hover:-translate-y-1 border border-primary-200`}
+                onClick={(e) => handleNavigation(e, '/contacto')}
               >
                 Contáctanos
                 <FiArrowRight className="ml-2" />
@@ -300,60 +278,37 @@ export default function HomePage() {
       </section>
 
       <style jsx global>{`
-        @keyframes slideInFromRight {
-          0% {
-            opacity: 0;
-            transform: translateX(100px);
-          }
-          100% {
-            opacity: 1;
-            transform: translateX(0);
-          }
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
         }
         
-        @keyframes autoScrollForward {
-          0%, 5% {
-            transform: translateX(0);
-          }
-          42% {
-            transform: translateX(-95%);
-          }
-          50% {
-            transform: translateX(-100%);
-          }
-          55% {
-            transform: translateX(-100%);
-          }
-          95% {
-            transform: translateX(-5%);
-          }
-          100% {
-            transform: translateX(0);
-          }
+        .animate-fade-in {
+          animation: fadeIn 0.5s ease-out forwards;
         }
         
-        @media (max-width: 768px) {
-          .cards-container {
-            position: relative;
-            animation: none;
-            overflow-x: auto;
-            padding-bottom: 0.5rem;
-            overflow-x: scroll !important;
-            -webkit-overflow-scrolling: touch !important;
-          }
-          
-          .cards-container:not(:hover):not(:active):not(.paused) .card-slide {
-            animation: autoScrollForward 60s linear infinite;
-            animation-play-state: running;
-            pointer-events: auto;
-          }
-          
-          .cards-container:hover .card-slide,
-          .cards-container:active .card-slide,
-          .cards-container.paused .card-slide {
-            animation-play-state: paused !important;
-            transform: none !important;
-          }
+        .page-exit {
+          animation: fadeOut 0.4s ease-in-out forwards;
+        }
+        
+        @keyframes fadeOut {
+          from { opacity: 1; }
+          to { opacity: 0; }
+        }
+        
+        .page-enter {
+          opacity: 0;
+          animation: fadeIn 0.5s ease-out forwards;
+        }
+        
+        .card-animate {
+          opacity: 1;
+          transition: opacity 0.4s ease-in-out, transform 0.3s ease-in-out;
+        }
+        
+        .card-exit {
+          opacity: 0;
+          transition: opacity 0.4s ease-in-out;
         }
       `}</style>
     </div>
